@@ -192,10 +192,6 @@ def delete_row(id):
 
     except sqlite3.Error as err:
         print('Database Error', err)
-    
-    except ValueError as err:
-        print('There was a problem finding someone with that name.' \
-        'Make sure you spelled their name correctly.', err)
 
     finally:
         if conn != None:

@@ -1,4 +1,5 @@
-
+#This program was written by Logan Gibson on 12/6/25
+#Its name is "Cities Database Viewer"
 
 import sqlite3
 
@@ -20,10 +21,6 @@ def main():
 
     # Close the connection.
     conn.close()
-           
-
-
-
 
 # The add_cities_table adds the Cities table to the database.
 def add_cities_table(cur):
@@ -62,16 +59,6 @@ def add_cities(cur):
         cur.execute('''INSERT INTO Cities (CityID, CityName, Population)
                        VALUES (?, ?, ?)''', (row[0], row[1], row[2]))
 
-# The display_cities function displays the contents of
-# the Cities table.
-
-#the problem now: get the database into a list I can configure
-#what if instead of working with the data directly, I manually configured it
-#so I simply go through the list in a loop and make a new list
-
-#I need to remove the stupid numbers
-#eliminate list formatting
-#then I need to add new line characters
 
 def make_cities_list():
     conn = sqlite3.connect('cities.db')
@@ -87,7 +74,9 @@ CITIES_LIST = make_cities_list()
 
 def sort_alpha(CITIES_LIST):
     CITIES_LIST.sort()
-    alpha_list = CITIES_LIST
+    alpha_list = str(CITIES_LIST)
+    alpha_list = alpha_list.lstrip("[")
+    alpha_list = alpha_list.rstrip("]")
     return alpha_list
 
 ALPHA_LIST = sort_alpha(CITIES_LIST)
@@ -109,6 +98,9 @@ def sort_pop_a(POP_LIST):
     pop_a_list = []
     for city in POP_LIST:
         pop_a_list.append(city[1])
+    pop_a_list = str(pop_a_list)
+    pop_a_list = pop_a_list.rstrip("]")
+    pop_a_list = pop_a_list.lstrip("[")
     return pop_a_list
     
 POP_A_LIST = sort_pop_a(POP_LIST)
@@ -116,10 +108,13 @@ POP_A_LIST = sort_pop_a(POP_LIST)
 def sort_pop_d(POP_LIST):
     POP_LIST.sort()
     POP_LIST.reverse()
-    pop_a_list = []
+    pop_d_list = []
     for city in POP_LIST:
-        pop_a_list.append(city[1])
-    return pop_a_list
+        pop_d_list.append(city[1])
+    pop_d_list = str(pop_d_list)
+    pop_d_list = pop_d_list.lstrip("[")
+    pop_d_list = pop_d_list.rstrip("]")
+    return pop_d_list
 
 POP_D_LIST = sort_pop_d(POP_LIST)
 
@@ -209,8 +204,6 @@ if __name__ == '__main__':
 
 #Begin the GUI!
 
-
-
 import tkinter
 
 class Cities_GUI:
@@ -226,16 +219,17 @@ class Cities_GUI:
 
         self.info_label = tkinter.Label(self.top_frame, 
         text = 'Welcome to the cities database interface!' \
-        ' Click buttons to show the data you want to see.')
+        ' Click buttons to show the data you want to see.\n' \
+        'Use the Clear button to reset your selections.')
 
         self.name_button = tkinter.Button(self.top_frame,
          text='Sort Alphabetically', command=self.alphabetically)
 
         self.pop_a_button = tkinter.Button(self.top_frame,
-         text='Sort by Population (Ascending)', command=self.pop_a)
+         text='Sort by Population (Ascending Left to Right)', command=self.pop_a)
         
         self.pop_d_button = tkinter.Button(self.top_frame,
-         text='Sort by Population (Descending)', command=self.pop_d)
+         text='Sort by Population (Descending Left to Right)', command=self.pop_d)
         
         #now for the output field labels
 
@@ -245,7 +239,6 @@ class Cities_GUI:
 
         self.stats_var = tkinter.StringVar()
 
-       
 
         #the chart label
         self.database_label = tkinter.Label(self.database_frame,
@@ -253,8 +246,6 @@ class Cities_GUI:
         
         self.stats_label = tkinter.Label(self.stats_frame, 
                             textvariable = self.stats_var)
-        
-        
         
         
         #creating integer variable for the radio buttons to come
@@ -288,6 +279,7 @@ class Cities_GUI:
         self.stats_frame.pack(pady = 10)
         self.bottom_frame.pack(pady= 10)
 
+        self.info_label.pack()
         self.stats_label.pack()
         self.database_label.pack()
 
@@ -332,24 +324,6 @@ class Cities_GUI:
         self.stats_var.set('')
         self.radio_var.set(0)
         
-    #get the raw string and convert it into a proper list
-
- 
-
-    #I position this so it isn't a part of innit
-    #but it still is a part of the class MyGUI
 
 my_database = Cities_GUI()
         
-#Next, write a program that connects to the cities.db database, and allows the user to select any of the following operations:
-#Display a list of cities sorted by population, in ascending order.
-#Display a list of cities sorted by population, in descending order.
-#Display a list of cities sorted by name.
-#Display the total population of all the cities.
-#Display the average population of all the cities.
-#Display the city with the highest population.
-#Display the city with the lowest population.
-
-
-#This program was written by Logan Gibson on 12/4/25
-#Its name is "Cities Database Interface"
